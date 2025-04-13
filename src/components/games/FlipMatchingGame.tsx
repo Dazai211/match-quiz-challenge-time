@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -26,6 +25,13 @@ const cardEmojis = [
   '🦁', '🐮', '🐷', '🐸', '🐵', '🦄', '🦋', '🐢',
   '🦉', '🦇', '🐝', '🐙', '🦑', '🦞', '🦐', '🐠'
 ];
+
+interface GameState {
+  cards: Card[];
+  matchedPairs: number;
+  moves: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+}
 
 const FlipMatchingGame = () => {
   const { toast } = useToast();
@@ -152,6 +158,39 @@ const FlipMatchingGame = () => {
       default: return 'grid-cols-3';
     }
   };
+
+  // Load saved game state from localStorage on component mount
+  useEffect(() => {
+    const savedGameState = localStorage.getItem('flipMatchingGameState');
+    if (savedGameState) {
+      const parsedState: GameState = JSON.parse(savedGameState);
+      // Restore game state if it exists
+      setCards(parsedState.cards);
+      setMatchedPairs(parsedState.matchedPairs);
+      setMoves(parsedState.moves);
+      setDifficulty(parsedState.difficulty);
+    }
+  }, []);
+
+  // Save game state to localStorage whenever it changes
+  useEffect(() => {
+    if (gameStarted && !gameOver) {
+      const gameState: GameState = {
+        cards,
+        matchedPairs,
+        moves,
+        difficulty
+      };
+      localStorage.setItem('flipMatchingGameState', JSON.stringify(gameState));
+    }
+  }, [cards, matchedPairs, moves, difficulty, gameStarted, gameOver]);
+
+  // Clear localStorage when game is fully completed
+  useEffect(() => {
+    if (gameOver) {
+      localStorage.removeItem('flipMatchingGameState');
+    }
+  }, [gameOver]);
 
   return (
     <div className="max-w-4xl mx-auto px-4">
