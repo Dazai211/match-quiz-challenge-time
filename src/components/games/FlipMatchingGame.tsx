@@ -4,15 +4,23 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Shuffle } from 'lucide-react';
 
-// Define the card type
-interface Card {
-  id: number;
-  content: string;
-  isFlipped: boolean;
-  isMatched: boolean;
-}
+// 🎮 Flip Matching Game Component
+// 
+// Content Customization Guide:
+// 1. To change card content from emojis to pictures:
+//    - Modify the 'cardEmojis' array below
+//    - Replace emoji strings with image URLs or paths
+//    Example:
+//    const cardEmojis = [
+//      'https://example.com/image1.jpg', 
+//      'https://example.com/image2.jpg',
+//      // ... more image URLs
+//    ];
+//
+// 2. Adjust number of pairs by modifying 'getPairsCount()' method
+// 3. Change game difficulty levels in the same method
 
-// Card emojis for matching
+// Card content - currently using emojis, can be easily replaced with image URLs
 const cardEmojis = [
   '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼',
   '🦁', '🐮', '🐷', '🐸', '🐵', '🦄', '🦋', '🐢',
